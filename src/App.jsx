@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Components/Navbar";
 import Home from "./pages/Home";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Cart from "./pages/Cart";
 
 const App = () => {
   const [products, setProducts] = useState([]);
@@ -22,21 +24,18 @@ const App = () => {
       .catch((error) => {
         console.error("Error fetching the products:", error);
       });
-  }, []);
+  }, [cart]);
   // !localstorage
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-    console.log(cart);
-
-  }, []);
 
   return (
     <div>
       <Navbar />
-      <Home products={products} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home products={products} />}></Route>
+          <Route path="/cart" element={<Cart products={products} />}></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };

@@ -9,7 +9,7 @@ const Home = ({ products }) => {
       </div>
       <div className="grid grid-cols-4 gap-12">
         {products.map((product) => (
-          <Card key={product.id}  product={product} />
+          <Card key={product.id} product={product} />
         ))}
       </div>
     </div>
