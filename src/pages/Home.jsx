@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "../Components/Card";
-
 const Home = ({ products }) => {
   return (
     <div className="flex flex-col gap-6 my-12 justify-center items-center w-[80%] m-auto">

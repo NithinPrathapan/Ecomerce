@@ -7,7 +7,6 @@ import {
 } from "../store/cartSlice";
 
 const Cart = ({ products }) => {
-  console.log(products[0]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cart);
   const listItems = [];
@@ -15,7 +14,21 @@ const Cart = ({ products }) => {
     const existing = products.find((product) => product.id === cartitem.id);
     if (existing) listItems.push({ existing, quantity: cartitem.quantity });
   });
-  console.log(listItems);
+
+  // find total amount
+
+  console.log(listItems, "lstitems");
+  const totalAmount = listItems
+    .reduce((total, item) => {
+      return total + item.existing.price * item.quantity;
+    }, 0)
+    .toFixed(2);
+
+  const totalQuantity = listItems.reduce((total, item) => {
+    return total + item.quantity;
+  }, 0);
+
+  console.log(totalAmount);
 
   function increment(id) {
     dispatch(incrementQuantity(id));
@@ -30,9 +43,9 @@ const Cart = ({ products }) => {
   }
   return (
     <div>
-      {listItems && listItems.length > 0 ? (
-        listItems.map((item) => (
-          <div className="flex flex-col justify-between w-[80%] m-auto py-12">
+      <div className="flex flex-col justify-between w-[80%] m-auto py-12">
+        {listItems && listItems.length > 0 ? (
+          listItems.map((item) => (
             <div className="flex  gap-4 border p-4 w-full">
               <div className="flex items-center hover:border-b-2 hover:border-orange-500 border-r transition-all ease-in-out duration-200  gap-2 border-b  justify-around w-full">
                 <img
@@ -84,14 +97,33 @@ const Cart = ({ products }) => {
                 <button>Remove</button>
               </div>
             </div>
-            <div className="">total</div>
-          </div>
-        ))
-      ) : (
-        <h1 className="h-10 w-full text-center font-semibold text-orange-500 flex items-center justify-center my-[10%] text-8xl">
-          Your Cart is Empty
+          ))
+        ) : (
+          <h1 className="h-10 w-full text-center font-semibold text-orange-500 flex items-center justify-center my-[10%] text-8xl">
+            Your Cart is Empty
+          </h1>
+        )}
+      </div>
+      <div className="w-[80%] flex flex-col gap-4 m-auto border-dashed border-2 p-4">
+        <h1 className="text-2xl font-sans uppercase font-semibold">
+          Proceed To Payment
         </h1>
-      )}
+        <div className="flex flex-col gap-2">
+          <div>
+            <h1>Total Quantity</h1>
+            <p>{totalQuantity}</p>
+          </div>
+          <div>
+            <h1>Total Amount</h1>
+            <p>$ {totalAmount}</p>
+          </div>
+          <div>
+            <button className="bg-orange-500 px-8 py-3 rounded-md uppercase text-white font-semibold tracking-widest mt-4 mb-4">
+              Proceed to Payment
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
