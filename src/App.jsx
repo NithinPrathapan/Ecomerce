@@ -10,6 +10,7 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [searchKey, setSearchKey] = useState("");
   const [cart, setCart] = useState([]);
+  console.log(searchKey);
 
   // !fetch items
   useEffect(() => {
@@ -27,6 +28,23 @@ const App = () => {
         console.error("Error fetching the products:", error);
       });
   }, []);
+
+  useEffect(() => {
+    console.log("searchkey", searchKey);
+    fetch(`https://dummyjson.com/products/category/${searchKey}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setProducts(data.products);
+      })
+      .catch((error) => {
+        console.error("Error fetching the products:", error);
+      });
+  }, [searchKey]);
 
   // !fetchby name
   const handleSubmit = (e) => {
@@ -56,16 +74,16 @@ const App = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex justify-around items-center ">
-        <SearchComponent
-          searchKey={searchKey}
-          setSearchKey={setSearchKey}
-          handleSubmit={handleSubmit}
-        />
+      <div className="flex items-center gap-12  w-[80%] justify-between  mx-auto my-12 ">
         <DropdownList
           searchKey={searchKey}
           setSearchKey={setSearchKey}
           handleCategorySubmit={handleCategorySubmit}
+        />
+        <SearchComponent
+          searchKey={searchKey}
+          setSearchKey={setSearchKey}
+          handleSubmit={handleSubmit}
         />
       </div>
       <BrowserRouter>

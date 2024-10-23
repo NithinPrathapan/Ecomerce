@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 const DropdownList = ({ searchKey, setSearchKey, handleCategorySubmit }) => {
-  const [categories, setCategories] = useState({});
-  console.log(categories);
+  const [categories, setCategories] = useState([]);
+
+  console.log(searchKey);
   useEffect(() => {
     fetch("https://dummyjson.com/products/categories")
       .then((response) => {
@@ -21,9 +22,20 @@ const DropdownList = ({ searchKey, setSearchKey, handleCategorySubmit }) => {
 
   return (
     <div>
-      <select className="border p-2  outline-none" name="" id="">
+      <select
+        value={searchKey}
+        onChange={(e) => {
+          setSearchKey(e.target.value);
+        }}
+        className="border p-2  outline-none"
+        name=""
+        id=""
+      >
+        <option value="">All Products</option>
         {categories.map((category) => (
-          <option className="p-2" value="watch">{category.name}</option>
+          <option className="p-2" value={category.name}>
+            {category.name}
+          </option>
         ))}
       </select>
     </div>
